@@ -6,7 +6,7 @@
 /*   By: cmontaig <cmontaig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 13:36:55 by cmontaig          #+#    #+#             */
-/*   Updated: 2025/01/26 18:17:52 by cmontaig         ###   ########.fr       */
+/*   Updated: 2025/02/02 14:15:52 by cmontaig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,5 +18,6 @@
 # include <string.h>
 # include <unistd.h>
 
+void	ft_putstr_fd(char *s, int fd);
 
 #endif

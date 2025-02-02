@@ -8,10 +8,12 @@ ROSE = \033[38;5;218m
 BLUE = \033[38;5;153m
 NC = \033[0m
 
-LIBRARIES_DIR = ./Libraries
+LIBRARIES_DIR = ./Libraries/libft
 LIBRARIES = $(LIBRARIES_DIR)/libft.a
 
 SRCS =	srcs/parsing/parsing.c\
+		srcs/parsing/parsing_map.c\
+		srcs/parsing/init_map.c\
 
 OBJS = $(SRCS:.c=.o)
 

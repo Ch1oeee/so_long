@@ -1,7 +1,10 @@
 NAME = libft.a
 FLAGS = -Wall -Wextra -Werror
 RM = rm -rf
-SRCS =	
+SRCS =	ft_putstr_fd.c\
+		../gnl/get_next_line.c\
+		../gnl/get_next_line_utils.c\
+
 
 OBJS = $(SRCS:.c=.o)
 
