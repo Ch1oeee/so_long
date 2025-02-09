@@ -6,20 +6,20 @@
 /*   By: cmontaig <cmontaig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 00:40:04 by cmontaig          #+#    #+#             */
-/*   Updated: 2025/02/02 17:10:33 by cmontaig         ###   ########.fr       */
+/*   Updated: 2025/02/09 04:01:42 by cmontaig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minilibx-linux/mlx.h"
 #include "../so_long.h"
 #include "../../Libraries/gnl/get_next_line.h"
+#include "../../Libraries/libft/libft.h"
 
 void	error_map(char *str, t_map *map)
-{
-	(void)map;
-	
+{	
 	printf("Error, %s\n", str);
-	// free(map);
+	if (map)
+		free(map);
 	exit(1);
 }
 
@@ -32,7 +32,6 @@ int	grid_length(char *str)
 		i++;
 	return (i);
 }
-
 int	grid_height(char *file)
 {
 	int		fd;
@@ -40,16 +39,15 @@ int	grid_height(char *file)
 	char	*line;
 
 	fd = open(file, O_RDONLY);
-	printf("ouvert yeah\n");
 	if (fd == -1)
 		error_map("Map not found", NULL);
 	count = 0;
 	line = get_next_line(fd);
-	printf("line okaaay\n");
 	while (line)
 	{
-		line = get_next_line(fd);
 		count++;
+		free(line);
+		line = get_next_line(fd);
 	}
 	free(line);
 	close(fd);
@@ -62,6 +60,7 @@ void	verify_letters(char	*line)
 
 	i = 0;
 	while (line[i])
+
 	{
 		if (line[i] != '1' && line[i] != '0'&& line[i] != 'C' && line[i] != 'E'
 			&& line[i] != 'P')
@@ -78,14 +77,14 @@ void	missing_letters(t_map *map)
 	int		x;
 	int		y = 0;
 
-	// x = 0;
-	while (y < map->map_y)
+	if (!map || !map->grid)
+		error_map("Invalid map data", NULL);
+	while (y < map->height)
 	{
-		x = 0;
-		printf("%c", map->grid[y][x]);
-		
-		while(x < map->map_x)
+		x = 0;		
+		while (x < map->width)
 		{
+			printf("%c", map->grid[y][x]);
 			if (map->grid[y][x] == 'E')
 				count_e++;
 			if (map->grid[y][x] == 'P')
@@ -93,7 +92,6 @@ void	missing_letters(t_map *map)
 			if (map->grid[y][x] == 'C')
 				count_c++;
 			x++;
-			printf("%c", map->grid[y][x]);
 		}
 		printf("\n");
 		y++;
@@ -103,31 +101,89 @@ void	missing_letters(t_map *map)
 		error_map("More than one player or exit", NULL);
 	if (count_c == 0 || count_e == 0 || count_p == 0)
 		error_map("Missing player, exit or collectibles", NULL);
-	else
-		printf("Symbols are okay");
-
 }
 
-// verifie si la map est rectangulaire et etoure de 1
 void	rectangle_map(t_map *map)
 {
 	int	x;
 	int	y;
 
 	x = 0;
-	while (x < map->map_x)
+	while (x < map->width)
 	{
-		if (map->grid[0][x] != '1'|| map->grid[map->map_y - 1][x] != '1')
+		if (map->grid[0][x] != '1'|| map->grid[map->height - 1][x] != '1')
 			error_map("False border", NULL);
-		x++;
+		x++;	
 	}
 	y = 0;
-	while (y < map->map_y)
+	while (y < map->height)
 	{
-		if (map->grid[y][0] != '1' || map->grid[y][map->map_x - 1] != '1')
+		if (map->grid[y][0] != '1' || map->grid[y][map->width - 1] != '1')
 			error_map("False border", NULL);
 		y++;
 	}
-	if (map->map_x == map->map_y)
+	if (map->width == map->height)
 		error_map("Map is not a rectangle", NULL);
+}
+
+void	flood_fill(t_game *game, char fill, int y, int x)
+{
+	if (x < 0 || y < 0 || x >= game->map.width || y >= game->map.height)
+		return ;
+	if (game->map.grid[y][x] == '1' || game->map.grid[y][x] == fill)
+		return ;
+	game->map.grid[y][x] = fill;
+	flood_fill(game, fill, y, x - 1);
+	flood_fill(game, fill, y, x + 1);
+	flood_fill(game, fill, y - 1, x);
+	flood_fill(game, fill, y + 1, x);
+}
+
+void	verify_paths(t_game *game)
+{
+	flood_fill(game, 'F', game->map.player_y, game->map.player_x);
+	verify_exit(game);
+	verify_collectibles(game);
+}
+
+void	verify_exit(t_game *game)
+{
+	int 	i;
+	int 	j;
+	char	**grid;
+	
+	grid = game->map.grid;
+	i = 0;
+	while (i < game->map.height)
+	{
+		j = 0;
+		while (j < game->map.width)
+		{
+			if (grid[i][j] == 'E')
+				error_map("Exit not accessible", NULL);
+			j++;
+		}
+		i++;
+	}
+}
+
+void	verify_collectibles(t_game *game)
+{
+	int 	i;
+	int 	j;
+	char	**grid;
+
+	grid = game->map.grid;
+	i = 0;
+	while (i < game->map.height)
+	{
+		j = 0;
+		while (j < game->map.width)
+		{
+			if (grid[i][j] == 'C')
+				error_map("Not all collectibles are accessible", NULL);
+			j++;
+		}
+		i++;
+	}
 }

@@ -1,5 +1,5 @@
 NAME = so_long
-FLAGS = -Wall -Wextra -Werror #-g3 -fsanitize=address
+FLAGS = -Wall -Wextra -Werror -g3 -fsanitize=address
 MLX_FLAGS = -L./minilibx-linux -lmlx -lbsd -lXext -lX11 -lm
 RM = rm -rf
 

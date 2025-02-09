@@ -2,6 +2,7 @@ NAME = libft.a
 FLAGS = -Wall -Wextra -Werror
 RM = rm -rf
 SRCS =	ft_putstr_fd.c\
+		ft_strdup.c\
 		../gnl/get_next_line.c\
 		../gnl/get_next_line_utils.c\
 

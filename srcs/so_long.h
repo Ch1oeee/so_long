@@ -6,7 +6,7 @@
 /*   By: cmontaig <cmontaig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 14:17:33 by cmontaig          #+#    #+#             */
-/*   Updated: 2025/02/02 17:19:37 by cmontaig         ###   ########.fr       */
+/*   Updated: 2025/02/09 16:06:43 by cmontaig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,18 @@
 # include <stdlib.h>
 # include <math.h>
 
+typedef struct	s_map {
+	int		height;
+	int		width;
+	char 	**grid;
+	char	*path;
+	int		player_y;
+	int		player_x;
+	int		exit_y;
+	int		exit_x;
+	int		collectibles;
+}				t_map;
+
 typedef struct	s_game {
 	void	*mlx;
 	void	*win;
@@ -33,25 +45,31 @@ typedef struct	s_game {
 	int		bits_per_pixel;
 	int		line_length;
 	int		endian;
+	int		player_moves;
+	t_map	map;
 }				t_game;
 
-typedef struct	s_map {
-	int		map_y;
-	int		map_x;
-	char 	**grid;
-	char	*path;
-}				t_map;
 
 
+int	key_handler(int keycode, t_game *game);
+int	close_window(t_game *game);
+
+
+//PARSING
 void	my_mlx_pixel_put(t_game *data, int x, int y, int color);
 void	error_map(char *str, t_map *map);
-int		read_map(t_map *map, char **argv);
+int		read_map(t_game *game, char **argv);
 int		grid_length(char *str);
-void		verify_letters(char	*line);
+void	verify_letters(char	*line);
 void	rectangle_map(t_map *map);
 void	free_map(t_map *map);
 int		grid_height(char *file);
 void	missing_letters(t_map *map);
-t_map	malloc_map(t_map *map, char **argv);
+void	assign_placement(t_map *map, char *line, int i);
+void	verify_exit(t_game *game);
+void	verify_paths(t_game *game);
+void	flood_fill(t_game *game, char fill, int y, int x);
+void	verify_collectibles(t_game *game);
+
 
 #endif

@@ -1,25 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   libft.h                                            :+:      :+:    :+:   */
+/*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cmontaig <cmontaig@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cmontaig <cmontaig@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/04 13:36:55 by cmontaig          #+#    #+#             */
-/*   Updated: 2025/02/08 22:54:23 by cmontaig         ###   ########.fr       */
+/*   Created: 2024/11/04 12:55:36 by cmontaig          #+#    #+#             */
+/*   Updated: 2024/11/04 13:50:02 by cmontaig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LIBFT_H
-# define LIBFT_H
+#include "libft.h"
 
-# include <stdio.h>
-# include <stdlib.h>
-# include <string.h>
-# include <unistd.h>
-# include "../gnl/get_next_line.h"
+size_t	ft_strlen(const char *s)
+{
+	size_t	i;
 
-void	ft_putstr_fd(char *s, int fd);
-char	*ft_strdup(const char *s);
-
-#endif
+	i = 0;
+	while (s[i])
+		i++;
+	return (i);
+}

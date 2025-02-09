@@ -6,22 +6,23 @@
 /*   By: cmontaig <cmontaig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 11:21:08 by cmontaig          #+#    #+#             */
-/*   Updated: 2025/02/02 17:22:09 by cmontaig         ###   ########.fr       */
+/*   Updated: 2025/02/09 03:47:44 by cmontaig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minilibx-linux/mlx.h"
 #include "../so_long.h" 
 #include "../../Libraries/gnl/get_next_line.h"
+#include "../../Libraries/libft/libft.h"
 
 void	free_map(t_map *map)
 {
 	int i;
 
-	if (!map->grid)
+	if (!map || !map->grid)
 		return;
 	i = 0;
-	while (i < map->map_y)
+	while (i < map->height)
 	{
 		free(map->grid[i]);
 		i++;
@@ -34,9 +35,7 @@ void	allocate_map(t_map *map, int line_count)
 {
 	map->grid = ft_calloc(sizeof(char *), (line_count + 1));
 	if (!map->grid)
-		error_map("Malloc failed", NULL);
-	else
-		printf("Malloc okaay\n");
+		error_map("Malloc failed", map);
 }
 
 void	fill_map(t_map *map, char *file)
@@ -47,18 +46,19 @@ void	fill_map(t_map *map, char *file)
 
 	fd = open(file, O_RDONLY);
 	if (fd == -1)
-		error_map("Map not found", NULL);
+		error_map("Map not found", map);
 	i = 0;
 	line = get_next_line(fd);
 	while (line)
 	{
-		if (grid_length(line) != map->map_x)
-			error_map("Map lines not the same length", NULL);
-		else
-			printf("all lines are the same length\n");
-		map->grid[i] = line;
-		printf("grid fill %s\n", map->grid[i]);
+		if (i == 0)
+			map->width = grid_length(line);
+		if (grid_length(line) != map->width)
+			error_map("Map lines not the same length", map);
+		map->grid[i] = ft_strdup(line);
+		assign_placement(map, line, i);
 		verify_letters(line);
+		free(line);
 		i++;
 		line = get_next_line(fd);
 	}
@@ -66,57 +66,40 @@ void	fill_map(t_map *map, char *file)
 	close(fd);
 }
 
-int	read_map(t_map *map, char **argv)
+void	assign_placement(t_map *map, char *line, int i)
 {
-	map->map_y = grid_height(argv[1]);
-	if (map->map_y == 0)
+	int	x;
+
+	x = 0;
+	while(line[x])
+	{
+		if (line[x] == 'P')
+		{
+			map->player_x = x;
+			map->player_y = i;
+		}
+		else if (line[x] == 'E')
+		{
+			map->exit_x = x;
+			map->exit_y = i;
+		}
+		else if (line[x] == 'C')
+			map->collectibles++;
+		x++;
+	}
+}
+
+int	read_map(t_game *game, char **argv)
+{	
+	game->map.height = grid_height(argv[1]);
+	if (game->map.height == 0)
 		error_map("Empty map", NULL);
-	map->map_x = grid_length(get_next_line(open(argv[1], O_RDONLY)));
-	printf("height %d, length %d\n", map->map_y, map->map_x);
-	allocate_map(map, map->map_y);
-	fill_map(map, argv[1]);
-	missing_letters(map);
-	rectangle_map(map);
+	game->map.width = 0;
+	allocate_map(&game->map, game->map.height);
+	fill_map(&game->map, argv[1]);
+	rectangle_map(&game->map);
+	missing_letters(&game->map);
+	verify_paths(game);
 	return (1);
 }
 
-t_map	malloc_map(t_map *map, char **argv)
-{
-	
-}
-
-
-// int	read_map(t_map *map, char **argv)
-// {
-// 	char	*line;
-// 	int		fd;
-// 	int		i;
-
-// 	fd = open(argv[1], O_RDONLY);
-// 	if (fd == -1)
-// 		error_map("Map not found", map);\n
-// 	line = get_next_line(fd);
-// 	if (!line)
-// 		error_map("Empty map", map);
-// 	map->map_x = grid_length(line);
-// 	map->map_y = 0;
-// 	map->grid = malloc(sizeof(char *) * (map->map_y + 1));
-// 	if (!map->grid)
-// 		error_map("Malloc failed", map);
-// 	i = 0;
-// 	while (line)
-// 	{
-// 		if (grid_length(line) != map->map_x)
-// 			error_map("Map lines not the same length", map);
-// 		map->grid[i] = line;
-// 		verify_letters(line);
-// 		map->map_y++;
-// 		i++;
-// 		line = get_next_line(fd);
-// 	}
-// 	map->grid[i] = NULL;
-// 	rectangle_map(map);
-// 	printf("height %d\n, length %d\n", map->map_y, map->map_x);
-// 	close(fd);
-// 	return(1);
-// }
