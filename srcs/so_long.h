@@ -6,7 +6,7 @@
 /*   By: cmontaig <cmontaig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 14:17:33 by cmontaig          #+#    #+#             */
-/*   Updated: 2025/02/09 16:06:43 by cmontaig         ###   ########.fr       */
+/*   Updated: 2025/02/10 11:55:26 by cmontaig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,16 @@ typedef struct	s_map {
 	int		collectibles;
 }				t_map;
 
+typedef struct s_textures {
+	void	*grass;
+	void	*wall;
+	void	*player;
+	void	*exit;
+	void	*collectible;
+	int		img_width;
+	int		img_height;
+}			t_textures;
+
 typedef struct	s_game {
 	void	*mlx;
 	void	*win;
@@ -47,13 +57,14 @@ typedef struct	s_game {
 	int		endian;
 	int		player_moves;
 	t_map	map;
+	t_textures	textures;
 }				t_game;
 
 
-
-int	key_handler(int keycode, t_game *game);
-int	close_window(t_game *game);
-
+int		key_handler(int keycode, t_game *game);
+int		close_window(t_game *game);
+void	draw_textures(t_game *game);
+void	draw_map(t_game *game);
 
 //PARSING
 void	my_mlx_pixel_put(t_game *data, int x, int y, int color);

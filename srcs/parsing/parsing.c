@@ -6,7 +6,7 @@
 /*   By: cmontaig <cmontaig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/26 18:32:44 by cmontaig          #+#    #+#             */
-/*   Updated: 2025/02/09 16:07:04 by cmontaig         ###   ########.fr       */
+/*   Updated: 2025/02/10 12:23:02 by cmontaig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ void	my_mlx_pixel_put(t_game *data, int x, int y, int color)
 	*(unsigned int*)dst = color;
 }
 
-
 int	main(int argc, char **argv)
 {
 	t_game	img;
@@ -34,7 +33,10 @@ int	main(int argc, char **argv)
 	}
 	game.mlx = mlx_init();
 	read_map(&game, argv);
-	game.win = mlx_new_window(game.mlx, 1000, 500, "Mims Land");
+	draw_textures(&game);
+	draw_map(&game);
+	game.win = mlx_new_window(game.mlx, game.map.width * 32, game.map.height * 32, "Mims Land");
+
 	img.img = mlx_new_image(game.mlx, 1000, 500);
 	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length,
 								&img.endian);
@@ -75,3 +77,53 @@ int	close_window(t_game *game)
 	exit(0);
 	return (0);
 }
+
+void	draw_textures(t_game *game)
+{
+	// game->textures.img_height = 32;
+	// game->textures.img_width = 32;
+
+	int	img_height = 32;
+	int	img_width = 32;
+	
+	game->textures.collectible = mlx_xpm_file_to_image(game->mlx, "../../assets/chick.xpm", &img_width, &img_height);
+	game->textures.exit = mlx_xpm_file_to_image(game->mlx, "../../assets/exit_log.xpm", &img_width, &img_height);
+	game->textures.grass = mlx_xpm_file_to_image(game->mlx, "../../assets/Grass.xpm", &img_width, &img_height);
+	game->textures.wall = mlx_xpm_file_to_image(game->mlx, "../../assets/Tree.xpm", &img_width, &img_height);
+	game->textures.player = mlx_xpm_file_to_image(game->mlx, "../../assets/Mako.xpm", &img_width, &img_height);
+
+	if (!game->textures.grass || !game->textures.wall || !game->textures.player || !game->textures.exit || !game->textures.collectible)
+	{
+		printf("non non nnon");
+		exit(1);
+	}
+}
+
+void	draw_map(t_game *game)
+{
+	int	x;
+	int	y;
+	int	tile_size = 32;
+
+	y = 0;
+	while (y < game->map.height)
+	{
+		x = 0;
+		while (x < game->map.width)
+		{
+			if (game->map.grid[y][x] == '1')
+				mlx_put_image_to_window(game->mlx, game->win, game->textures.wall, x * tile_size, y * tile_size);
+			else if (game->map.grid[y][x] == '0')
+				mlx_put_image_to_window(game->mlx, game->win, game->textures.grass, x * tile_size, y * tile_size);
+			else if (game->map.grid[y][x] == 'P')
+				mlx_put_image_to_window(game->mlx, game->win, game->textures.player, x * tile_size, y * tile_size);
+			else if (game->map.grid[y][x] == 'E')
+				mlx_put_image_to_window(game->mlx, game->win, game->textures.exit, x * tile_size, y * tile_size);
+			else if (game->map.grid[y][x] == 'C')
+				mlx_put_image_to_window(game->mlx, game->win, game->textures.collectible, x * tile_size, y * tile_size);
+			x++;
+		}
+		y++;
+	}
+}
+
