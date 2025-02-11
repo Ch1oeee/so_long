@@ -6,7 +6,7 @@
 /*   By: cmontaig <cmontaig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 14:17:33 by cmontaig          #+#    #+#             */
-/*   Updated: 2025/02/10 11:55:26 by cmontaig         ###   ########.fr       */
+/*   Updated: 2025/02/11 14:16:30 by cmontaig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,18 @@
 # include <stdlib.h>
 # include <math.h>
 
+// typedef struct s_data
+// {
+// 	int	endian;
+// 	char	*addr;
+// 	void	img;
+// };
+
 typedef struct	s_map {
 	int		height;
 	int		width;
 	char 	**grid;
+	char	**grid_cpy;
 	char	*path;
 	int		player_y;
 	int		player_x;
@@ -81,6 +89,5 @@ void	verify_exit(t_game *game);
 void	verify_paths(t_game *game);
 void	flood_fill(t_game *game, char fill, int y, int x);
 void	verify_collectibles(t_game *game);
-
 
 #endif

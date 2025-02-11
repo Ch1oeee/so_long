@@ -6,7 +6,7 @@
 /*   By: cmontaig <cmontaig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 11:21:08 by cmontaig          #+#    #+#             */
-/*   Updated: 2025/02/09 03:47:44 by cmontaig         ###   ########.fr       */
+/*   Updated: 2025/02/11 13:30:23 by cmontaig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,10 @@ void	free_map(t_map *map)
 void	allocate_map(t_map *map, int line_count)
 {
 	map->grid = ft_calloc(sizeof(char *), (line_count + 1));
+	map->grid_cpy = ft_calloc(sizeof(char *), (line_count + 1));
 	if (!map->grid)
+		error_map("Malloc failed", map);
+	if (!map->grid_cpy)
 		error_map("Malloc failed", map);
 }
 
@@ -56,12 +59,14 @@ void	fill_map(t_map *map, char *file)
 		if (grid_length(line) != map->width)
 			error_map("Map lines not the same length", map);
 		map->grid[i] = ft_strdup(line);
+		map->grid_cpy[i] = ft_strdup(line);
 		assign_placement(map, line, i);
 		verify_letters(line);
 		free(line);
 		i++;
 		line = get_next_line(fd);
 	}
+	map->grid[i] = NULL;
 	map->grid[i] = NULL;
 	close(fd);
 }

@@ -6,7 +6,7 @@
 /*   By: cmontaig <cmontaig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 00:40:04 by cmontaig          #+#    #+#             */
-/*   Updated: 2025/02/09 04:01:42 by cmontaig         ###   ########.fr       */
+/*   Updated: 2025/02/11 13:18:35 by cmontaig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,9 +130,9 @@ void	flood_fill(t_game *game, char fill, int y, int x)
 {
 	if (x < 0 || y < 0 || x >= game->map.width || y >= game->map.height)
 		return ;
-	if (game->map.grid[y][x] == '1' || game->map.grid[y][x] == fill)
+	if (game->map.grid_cpy[y][x] == '1' || game->map.grid_cpy[y][x] == fill)
 		return ;
-	game->map.grid[y][x] = fill;
+	game->map.grid_cpy[y][x] = fill;
 	flood_fill(game, fill, y, x - 1);
 	flood_fill(game, fill, y, x + 1);
 	flood_fill(game, fill, y - 1, x);
@@ -152,7 +152,7 @@ void	verify_exit(t_game *game)
 	int 	j;
 	char	**grid;
 	
-	grid = game->map.grid;
+	grid = game->map.grid_cpy;
 	i = 0;
 	while (i < game->map.height)
 	{
@@ -173,7 +173,7 @@ void	verify_collectibles(t_game *game)
 	int 	j;
 	char	**grid;
 
-	grid = game->map.grid;
+	grid = game->map.grid_cpy;
 	i = 0;
 	while (i < game->map.height)
 	{

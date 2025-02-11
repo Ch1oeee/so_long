@@ -6,7 +6,7 @@
 /*   By: cmontaig <cmontaig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/26 18:32:44 by cmontaig          #+#    #+#             */
-/*   Updated: 2025/02/10 12:23:02 by cmontaig         ###   ########.fr       */
+/*   Updated: 2025/02/11 14:19:33 by cmontaig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,19 @@ int	main(int argc, char **argv)
 	}
 	game.mlx = mlx_init();
 	read_map(&game, argv);
+	// int x;
+	// int	y = 0;
+	// while (y < game.map.height)
+	// {
+	// 	x = 0;		
+	// 	while (x < game.map.width)
+	// 	{
+	// 		printf("%c", game.map.grid[y][x]);
+	// 		x++;
+	// 	}
+	// 	printf("\n");
+	// 	y++;
+	// }
 	draw_textures(&game);
 	draw_map(&game);
 	game.win = mlx_new_window(game.mlx, game.map.width * 32, game.map.height * 32, "Mims Land");
@@ -86,15 +99,15 @@ void	draw_textures(t_game *game)
 	int	img_height = 32;
 	int	img_width = 32;
 	
+	game->textures.wall = mlx_xpm_file_to_image(game->mlx, "../../assets/Tree.xpm", &img_width, &img_height);
 	game->textures.collectible = mlx_xpm_file_to_image(game->mlx, "../../assets/chick.xpm", &img_width, &img_height);
 	game->textures.exit = mlx_xpm_file_to_image(game->mlx, "../../assets/exit_log.xpm", &img_width, &img_height);
 	game->textures.grass = mlx_xpm_file_to_image(game->mlx, "../../assets/Grass.xpm", &img_width, &img_height);
-	game->textures.wall = mlx_xpm_file_to_image(game->mlx, "../../assets/Tree.xpm", &img_width, &img_height);
 	game->textures.player = mlx_xpm_file_to_image(game->mlx, "../../assets/Mako.xpm", &img_width, &img_height);
 
 	if (!game->textures.grass || !game->textures.wall || !game->textures.player || !game->textures.exit || !game->textures.collectible)
 	{
-		printf("non non nnon");
+		printf("textures not loaded");
 		exit(1);
 	}
 }
