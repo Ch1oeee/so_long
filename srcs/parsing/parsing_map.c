@@ -6,7 +6,7 @@
 /*   By: cmontaig <cmontaig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 00:40:04 by cmontaig          #+#    #+#             */
-/*   Updated: 2025/02/11 13:18:35 by cmontaig         ###   ########.fr       */
+/*   Updated: 2025/02/12 11:53:11 by cmontaig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,19 @@ void	error_map(char *str, t_map *map)
 int	grid_length(char *str)
 {
 	int	i;
-
+	// int x;
+	// int	y = 0;
+	// while (y < game.map.height)
+	// {
+	// 	x = 0;		
+	// 	while (x < game.map.width)
+	// 	{
+	// 		printf("%c", game.map.grid[y][x]);
+	// 		x++;
+	// 	}
+	// 	printf("\n");
+	// 	y++;
+	// }
 	i = 0;
 	while (str[i])
 		i++;
@@ -56,11 +68,10 @@ int	grid_height(char *file)
 
 void	verify_letters(char	*line)
 {
-	int		i;
+	int	i;
 
 	i = 0;
 	while (line[i])
-
 	{
 		if (line[i] != '1' && line[i] != '0'&& line[i] != 'C' && line[i] != 'E'
 			&& line[i] != 'P')
@@ -98,9 +109,9 @@ void	missing_letters(t_map *map)
 	}
 	printf("player %d, exit %d, collectible %d\n", count_p, count_e, count_c);
 	if (count_e > 1 || count_p > 1)
-		error_map("More than one player or exit", NULL);
+		error_map("More than one player or exit", map);
 	if (count_c == 0 || count_e == 0 || count_p == 0)
-		error_map("Missing player, exit or collectibles", NULL);
+		error_map("Missing player, exit or collectibles", map);
 }
 
 void	rectangle_map(t_map *map)
@@ -112,18 +123,18 @@ void	rectangle_map(t_map *map)
 	while (x < map->width)
 	{
 		if (map->grid[0][x] != '1'|| map->grid[map->height - 1][x] != '1')
-			error_map("False border", NULL);
+			error_map("False border", map);
 		x++;	
 	}
 	y = 0;
 	while (y < map->height)
 	{
 		if (map->grid[y][0] != '1' || map->grid[y][map->width - 1] != '1')
-			error_map("False border", NULL);
+			error_map("False border", map);
 		y++;
 	}
 	if (map->width == map->height)
-		error_map("Map is not a rectangle", NULL);
+		error_map("Map is not a rectangle", map);
 }
 
 void	flood_fill(t_game *game, char fill, int y, int x)
@@ -144,6 +155,21 @@ void	verify_paths(t_game *game)
 	flood_fill(game, 'F', game->map.player_y, game->map.player_x);
 	verify_exit(game);
 	verify_collectibles(game);
+	free_grid_cpy(game->map.grid_cpy, game->map.height);
+}
+// sert a rien ??????
+void	free_grid_cpy(char **grid_cpy, int	height)
+{
+	int	i;
+	if(!grid_cpy)
+		return ;
+	i = 0;
+	while(i < height)
+	{
+		free(grid_cpy[i]);
+		i++;
+	}
+	free(grid_cpy);
 }
 
 void	verify_exit(t_game *game)

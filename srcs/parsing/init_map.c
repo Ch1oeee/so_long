@@ -6,7 +6,7 @@
 /*   By: cmontaig <cmontaig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 11:21:08 by cmontaig          #+#    #+#             */
-/*   Updated: 2025/02/11 13:30:23 by cmontaig         ###   ########.fr       */
+/*   Updated: 2025/02/12 11:41:26 by cmontaig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 void	free_map(t_map *map)
 {
 	int i;
-
 	if (!map || !map->grid)
 		return;
 	i = 0;
@@ -35,9 +34,12 @@ void	allocate_map(t_map *map, int line_count)
 {
 	map->grid = ft_calloc(sizeof(char *), (line_count + 1));
 	map->grid_cpy = ft_calloc(sizeof(char *), (line_count + 1));
-	if (!map->grid)
-		error_map("Malloc failed", map);
-	if (!map->grid_cpy)
+	map->player_x = -1;
+	map->player_y = -1;
+	map->exit_x = -1;
+	map->exit_y = -1;
+	map->collectibles = 0;
+	if (!map->grid || !map->grid_cpy)
 		error_map("Malloc failed", map);
 }
 
@@ -67,7 +69,7 @@ void	fill_map(t_map *map, char *file)
 		line = get_next_line(fd);
 	}
 	map->grid[i] = NULL;
-	map->grid[i] = NULL;
+	map->grid_cpy[i] = NULL;
 	close(fd);
 }
 
@@ -100,6 +102,7 @@ int	read_map(t_game *game, char **argv)
 	if (game->map.height == 0)
 		error_map("Empty map", NULL);
 	game->map.width = 0;
+	game->player_moves = 0;
 	allocate_map(&game->map, game->map.height);
 	fill_map(&game->map, argv[1]);
 	rectangle_map(&game->map);
@@ -108,3 +111,30 @@ int	read_map(t_game *game, char **argv)
 	return (1);
 }
 
+// 56 bytes in 1 blocks are still reachable in loss record 21 of 54
+// ==85107==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+// ==85107==    by 0x403EBD: ft_calloc (in /home/cmontaig/Documents/cursus/so_long/so_long)
+// ==85107==    by 0x403271: allocate_map (in /home/cmontaig/Documents/cursus/so_long/so_long)
+// ==85107==    by 0x403590: read_map (in /home/cmontaig/Documents/cursus/so_long/so_long)
+// ==85107==    by 0x40256F: main (in /home/cmontaig/Documents/cursus/so_long/so_long)
+// ==85107== 
+// ==85107== 56 bytes in 1 blocks are still reachable in loss record 22 of 54
+// ==85107==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+// ==85107==    by 0x403EBD: ft_calloc (in /home/cmontaig/Documents/cursus/so_long/so_long)
+// ==85107==    by 0x40328F: allocate_map (in /home/cmontaig/Documents/cursus/so_long/so_long)
+// ==85107==    by 0x403590: read_map (in /home/cmontaig/Documents/cursus/so_long/so_long)
+// ==85107==    by 0x40256F: main (in /home/cmontaig/Documents/cursus/so_long/so_long)
+
+// 102 bytes in 6 blocks are still reachable in loss record 25 of 54
+// ==85820==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+// ==85820==    by 0x40375C: ft_strdup (in /home/cmontaig/Documents/cursus/so_long/so_long)
+// ==85820==    by 0x4033B8: fill_map (in /home/cmontaig/Documents/cursus/so_long/so_long)
+// ==85820==    by 0x4035A5: read_map (in /home/cmontaig/Documents/cursus/so_long/so_long)
+// ==85820==    by 0x40256F: main (in /home/cmontaig/Documents/cursus/so_long/so_long)
+// ==85820== 
+// ==85820== 102 bytes in 6 blocks are still reachable in loss record 26 of 54
+// ==85820==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+// ==85820==    by 0x40375C: ft_strdup (in /home/cmontaig/Documents/cursus/so_long/so_long)
+// ==85820==    by 0x4033D4: fill_map (in /home/cmontaig/Documents/cursus/so_long/so_long)
+// ==85820==    by 0x4035A5: read_map (in /home/cmontaig/Documents/cursus/so_long/so_long)
+// ==85820==    by 0x40256F: main (in /home/cmontaig/Documents/cursus/so_long/so_long)

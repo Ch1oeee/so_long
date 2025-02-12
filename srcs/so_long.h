@@ -6,7 +6,7 @@
 /*   By: cmontaig <cmontaig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 14:17:33 by cmontaig          #+#    #+#             */
-/*   Updated: 2025/02/11 14:16:30 by cmontaig         ###   ########.fr       */
+/*   Updated: 2025/02/12 11:52:09 by cmontaig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,6 @@
 # include <stdlib.h>
 # include <math.h>
 
-// typedef struct s_data
-// {
-// 	int	endian;
-// 	char	*addr;
-// 	void	img;
-// };
 
 typedef struct	s_map {
 	int		height;
@@ -73,9 +67,10 @@ int		key_handler(int keycode, t_game *game);
 int		close_window(t_game *game);
 void	draw_textures(t_game *game);
 void	draw_map(t_game *game);
+void	free_grid(char **grid, int current_height);
+void	free_resources(t_game *game);
 
 //PARSING
-void	my_mlx_pixel_put(t_game *data, int x, int y, int color);
 void	error_map(char *str, t_map *map);
 int		read_map(t_game *game, char **argv);
 int		grid_length(char *str);
@@ -89,5 +84,11 @@ void	verify_exit(t_game *game);
 void	verify_paths(t_game *game);
 void	flood_fill(t_game *game, char fill, int y, int x);
 void	verify_collectibles(t_game *game);
+void	free_grid_cpy(char **grid_cpy, int	height);
+
+//GAME 
+
+void	character_moves(int keycode, t_game *game);
+
 
 #endif
