@@ -6,7 +6,7 @@
 /*   By: cmontaig <cmontaig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 14:17:33 by cmontaig          #+#    #+#             */
-/*   Updated: 2025/02/12 11:52:09 by cmontaig         ###   ########.fr       */
+/*   Updated: 2025/02/13 17:49:28 by cmontaig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,14 +67,12 @@ int		key_handler(int keycode, t_game *game);
 int		close_window(t_game *game);
 void	draw_textures(t_game *game);
 void	draw_map(t_game *game);
-void	free_grid(char **grid, int current_height);
-void	free_resources(t_game *game);
 
 //PARSING
 void	error_map(char *str, t_map *map);
 int		read_map(t_game *game, char **argv);
 int		grid_length(char *str);
-void	verify_letters(char	*line);
+void	verify_letters(char	*line, t_map *map);
 void	rectangle_map(t_map *map);
 void	free_map(t_map *map);
 int		grid_height(char *file);
@@ -89,6 +87,8 @@ void	free_grid_cpy(char **grid_cpy, int	height);
 //GAME 
 
 void	character_moves(int keycode, t_game *game);
+void	collect_collectibles(t_game *game);
+void	open_exit(t_game *game);
 
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: cmontaig <cmontaig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 00:40:04 by cmontaig          #+#    #+#             */
-/*   Updated: 2025/02/12 11:53:11 by cmontaig         ###   ########.fr       */
+/*   Updated: 2025/02/13 16:29:13 by cmontaig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,17 @@
 #include "../../Libraries/gnl/get_next_line.h"
 #include "../../Libraries/libft/libft.h"
 
-void	error_map(char *str, t_map *map)
-{	
+void error_map(char *str, t_map *map)
+{
 	printf("Error, %s\n", str);
 	if (map)
+	{
+		if (map->grid)
+			free_grid_cpy(map->grid, map->height);
+		if (map->grid_cpy)
+			free_grid_cpy(map->grid_cpy, map->height);
 		free(map);
+	}
 	exit(1);
 }
 
@@ -66,7 +72,7 @@ int	grid_height(char *file)
 	return (count);
 }
 
-void	verify_letters(char	*line)
+void	verify_letters(char	*line, t_map *map)
 {
 	int	i;
 
@@ -75,7 +81,7 @@ void	verify_letters(char	*line)
 	{
 		if (line[i] != '1' && line[i] != '0'&& line[i] != 'C' && line[i] != 'E'
 			&& line[i] != 'P')
-			error_map("Symbol not valid", NULL);
+			error_map("Symbol not valid", map);
 		i++;
 	}	
 }
@@ -157,8 +163,8 @@ void	verify_paths(t_game *game)
 	verify_collectibles(game);
 	free_grid_cpy(game->map.grid_cpy, game->map.height);
 }
-// sert a rien ??????
-void	free_grid_cpy(char **grid_cpy, int	height)
+
+void	free_grid_cpy(char **grid_cpy, int height)
 {
 	int	i;
 	if(!grid_cpy)
@@ -186,7 +192,7 @@ void	verify_exit(t_game *game)
 		while (j < game->map.width)
 		{
 			if (grid[i][j] == 'E')
-				error_map("Exit not accessible", NULL);
+				error_map("Exit not accessible", &game->map);
 			j++;
 		}
 		i++;
@@ -207,7 +213,7 @@ void	verify_collectibles(t_game *game)
 		while (j < game->map.width)
 		{
 			if (grid[i][j] == 'C')
-				error_map("Not all collectibles are accessible", NULL);
+				error_map("Not all collectibles are accessible", &game->map);
 			j++;
 		}
 		i++;

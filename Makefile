@@ -1,5 +1,5 @@
 NAME = so_long
-FLAGS = -Wall -Wextra -Werror -g3 -fsanitize=address
+FLAGS = -Wall -Wextra -Werror #-g3 -fsanitize=address
 MLX_FLAGS = -L./minilibx-linux -lmlx -lbsd -lXext -lX11 -lm
 RM = rm -rf
 
@@ -14,6 +14,7 @@ LIBRARIES = $(LIBRARIES_DIR)/libft.a
 SRCS =	srcs/parsing/parsing.c\
 		srcs/parsing/parsing_map.c\
 		srcs/parsing/init_map.c\
+		srcs/game/game.c\
 
 OBJS = $(SRCS:.c=.o)
 
