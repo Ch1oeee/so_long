@@ -6,7 +6,7 @@
 /*   By: cmontaig <cmontaig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/26 18:32:44 by cmontaig          #+#    #+#             */
-/*   Updated: 2025/02/13 17:45:09 by cmontaig         ###   ########.fr       */
+/*   Updated: 2025/02/15 14:19:26 by cmontaig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,19 +27,19 @@ int	main(int argc, char **argv)
 	game.mlx = mlx_init();
 	if (!game.mlx)
 	{
-		printf("mlx fail\n");
+		ft_printf("mlx fail\n");
 		exit(1);
 	}
 	read_map(&game, argv);
 	if (!game.map.grid)
 	{
-		printf("Can't print map\n");
+		ft_printf("Can't print map\n");
 		exit(1);
 	}
 	game.win = mlx_new_window(game.mlx, game.map.width * 32, game.map.height * 32, "Mims Land");
 	if (!game.win)
 	{
-		printf("Can't create window\n");
+		ft_printf("Can't create window\n");
 		exit(1);
 	}
 	draw_textures(&game);
@@ -56,10 +56,11 @@ int	key_handler(int keycode, t_game *game)
 	if (keycode == 65307)
 	{
 		free_grid_cpy(game->map.grid, game->map.height);
+		free_img(game);
 		mlx_destroy_window(game->mlx, game->win);
 		mlx_destroy_display(game->mlx);
 		free(game->mlx);
-		printf("escape\n");
+		ft_printf("escape\n");
 		exit(0);
 	}
 	else
@@ -70,8 +71,9 @@ int	key_handler(int keycode, t_game *game)
 
 int	close_window(t_game *game)
 {
-	printf("window closed\n");
+	ft_printf("window closed\n");
 	free_grid_cpy(game->map.grid, game->map.height);
+	free_img(game);
 	mlx_destroy_window(game->mlx, game->win);
 	mlx_destroy_display(game->mlx);
 	free(game->mlx);
@@ -91,9 +93,18 @@ void	draw_textures(t_game *game)
 
 	if (!game->textures.grass || !game->textures.wall || !game->textures.player || !game->textures.exit || !game->textures.collectible)
 	{
-		printf("textures not loaded");
+		ft_printf("textures not loaded");
 		exit(1);
 	}
+}
+
+void	free_img(t_game *game)
+{
+	mlx_destroy_image(game->mlx, game->textures.wall);
+	mlx_destroy_image(game->mlx, game->textures.collectible);
+	mlx_destroy_image(game->mlx, game->textures.exit);
+	mlx_destroy_image(game->mlx, game->textures.grass);
+	mlx_destroy_image(game->mlx, game->textures.player);
 }
 
 void	draw_map(t_game *game)

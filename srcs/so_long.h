@@ -6,7 +6,7 @@
 /*   By: cmontaig <cmontaig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 14:17:33 by cmontaig          #+#    #+#             */
-/*   Updated: 2025/02/13 17:49:28 by cmontaig         ###   ########.fr       */
+/*   Updated: 2025/02/15 15:14:43 by cmontaig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,25 +69,24 @@ void	draw_textures(t_game *game);
 void	draw_map(t_game *game);
 
 //PARSING
-void	error_map(char *str, t_map *map);
+void	error_map(char *str, t_game *game);
 int		read_map(t_game *game, char **argv);
 int		grid_length(char *str);
-void	verify_letters(char	*line, t_map *map);
-void	rectangle_map(t_map *map);
-void	free_map(t_map *map);
+void	verify_letters(char	*line, t_game *game);
+void	rectangle_map(t_game *game);
+void	free_map(t_game *game);
 int		grid_height(char *file);
-void	missing_letters(t_map *map);
-void	assign_placement(t_map *map, char *line, int i);
+void	missing_letters(t_game *game);
+void	assign_placement(t_game *game, char *line, int i);
 void	verify_exit(t_game *game);
 void	verify_paths(t_game *game);
 void	flood_fill(t_game *game, char fill, int y, int x);
 void	verify_collectibles(t_game *game);
 void	free_grid_cpy(char **grid_cpy, int	height);
+void	free_img(t_game *game);
 
 //GAME 
-
 void	character_moves(int keycode, t_game *game);
-void	collect_collectibles(t_game *game);
 void	open_exit(t_game *game);
 
 

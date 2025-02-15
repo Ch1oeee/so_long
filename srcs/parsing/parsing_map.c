@@ -6,7 +6,7 @@
 /*   By: cmontaig <cmontaig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 00:40:04 by cmontaig          #+#    #+#             */
-/*   Updated: 2025/02/13 16:29:13 by cmontaig         ###   ########.fr       */
+/*   Updated: 2025/02/15 15:22:09 by cmontaig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,36 +15,30 @@
 #include "../../Libraries/gnl/get_next_line.h"
 #include "../../Libraries/libft/libft.h"
 
-void error_map(char *str, t_map *map)
+void	error_map(char *str, t_game *game)
 {
-	printf("Error, %s\n", str);
-	if (map)
+	ft_printf("Error, %s\n", str);
+	if (game)
 	{
-		if (map->grid)
-			free_grid_cpy(map->grid, map->height);
-		if (map->grid_cpy)
-			free_grid_cpy(map->grid_cpy, map->height);
-		free(map);
+		if (game->map.grid)
+			free_grid_cpy(game->map.grid, game->map.height);
+		if (game->map.grid_cpy)
+			free_grid_cpy(game->map.grid_cpy, game->map.height);
+		if (game->mlx)
+		{
+			mlx_destroy_display(game->mlx);
+			free(game->mlx);
+		}
 	}
+	free(game);
 	exit(1);
 }
+
 
 int	grid_length(char *str)
 {
 	int	i;
-	// int x;
-	// int	y = 0;
-	// while (y < game.map.height)
-	// {
-	// 	x = 0;		
-	// 	while (x < game.map.width)
-	// 	{
-	// 		printf("%c", game.map.grid[y][x]);
-	// 		x++;
-	// 	}
-	// 	printf("\n");
-	// 	y++;
-	// }
+
 	i = 0;
 	while (str[i])
 		i++;
@@ -72,7 +66,7 @@ int	grid_height(char *file)
 	return (count);
 }
 
-void	verify_letters(char	*line, t_map *map)
+void	verify_letters(char	*line, t_game *game)
 {
 	int	i;
 
@@ -81,12 +75,12 @@ void	verify_letters(char	*line, t_map *map)
 	{
 		if (line[i] != '1' && line[i] != '0'&& line[i] != 'C' && line[i] != 'E'
 			&& line[i] != 'P')
-			error_map("Symbol not valid", map);
+			error_map("Symbol not valid", game);
 		i++;
 	}	
 }
 
-void	missing_letters(t_map *map)
+void	missing_letters(t_game *game)
 {
 	int		count_e = 0;
 	int		count_p = 0;
@@ -94,53 +88,50 @@ void	missing_letters(t_map *map)
 	int		x;
 	int		y = 0;
 
-	if (!map || !map->grid)
-		error_map("Invalid map data", NULL);
-	while (y < map->height)
+	while (y < game->map.height)
 	{
 		x = 0;		
-		while (x < map->width)
+		while (x < game->map.width)
 		{
-			printf("%c", map->grid[y][x]);
-			if (map->grid[y][x] == 'E')
+			// printf("%c", map->grid[y][x]);
+			if (game->map.grid[y][x] == 'E')
 				count_e++;
-			if (map->grid[y][x] == 'P')
+			if (game->map.grid[y][x] == 'P')
 				count_p++;
-			if (map->grid[y][x] == 'C')
+			if (game->map.grid[y][x] == 'C')
 				count_c++;
 			x++;
 		}
-		printf("\n");
+		// printf("\n");
 		y++;
 	}
-	printf("player %d, exit %d, collectible %d\n", count_p, count_e, count_c);
 	if (count_e > 1 || count_p > 1)
-		error_map("More than one player or exit", map);
+		error_map("More than one player or exit", game);
 	if (count_c == 0 || count_e == 0 || count_p == 0)
-		error_map("Missing player, exit or collectibles", map);
+		error_map("Missing player, exit or collectibles", game);
 }
 
-void	rectangle_map(t_map *map)
+void	rectangle_map(t_game *game)
 {
 	int	x;
 	int	y;
 
 	x = 0;
-	while (x < map->width)
+	while (x < game->map.width)
 	{
-		if (map->grid[0][x] != '1'|| map->grid[map->height - 1][x] != '1')
-			error_map("False border", map);
+		if (game->map.grid[0][x] != '1'|| game->map.grid[game->map.height - 1][x] != '1')
+			error_map("False border", game);
 		x++;	
 	}
 	y = 0;
-	while (y < map->height)
+	while (y < game->map.height)
 	{
-		if (map->grid[y][0] != '1' || map->grid[y][map->width - 1] != '1')
-			error_map("False border", map);
+		if (game->map.grid[y][0] != '1' || game->map.grid[y][game->map.width - 1] != '1')
+			error_map("False border", game);
 		y++;
 	}
-	if (map->width == map->height)
-		error_map("Map is not a rectangle", map);
+	if (game->map.width == game->map.height)
+		error_map("Map is not a rectangle", game);
 }
 
 void	flood_fill(t_game *game, char fill, int y, int x)
@@ -192,7 +183,7 @@ void	verify_exit(t_game *game)
 		while (j < game->map.width)
 		{
 			if (grid[i][j] == 'E')
-				error_map("Exit not accessible", &game->map);
+				error_map("Exit not accessible", game);
 			j++;
 		}
 		i++;
@@ -213,7 +204,7 @@ void	verify_collectibles(t_game *game)
 		while (j < game->map.width)
 		{
 			if (grid[i][j] == 'C')
-				error_map("Not all collectibles are accessible", &game->map);
+				error_map("Not all collectibles are accessible", game);
 			j++;
 		}
 		i++;
