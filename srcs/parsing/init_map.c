@@ -6,7 +6,7 @@
 /*   By: cmontaig <cmontaig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 11:21:08 by cmontaig          #+#    #+#             */
-/*   Updated: 2025/02/15 15:28:02 by cmontaig         ###   ########.fr       */
+/*   Updated: 2025/02/19 15:56:07 by cmontaig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,6 @@
 #include "../so_long.h" 
 #include "../../Libraries/gnl/get_next_line.h"
 #include "../../Libraries/libft/libft.h"
-
-void	free_map(t_game *game)
-{
-	int i;
-
-	if (!game || !game->map.grid)
-		return;
-
-	i = 0;
-	while (i < game->map.height)
-	{
-		free(game->map.grid[i]);
-		i++;
-	}
-	free(game->map.grid);
-	game->map.grid = NULL;
-}
-
 
 void	allocate_map(t_game *game, int line_count)
 {
@@ -42,33 +24,43 @@ void	allocate_map(t_game *game, int line_count)
 		error_map("Malloc failed", game);
 }
 
+void	process_map_line(t_game *game, char *line, int i)
+{
+	if (i == 0)
+		game->map.width = grid_length(line);
+	if (grid_length(line) != game->map.width)
+	{
+		free(line);
+		error_map("Map lines not the same length", game);
+	}
+	game->map.grid[i] = ft_strdup(line);
+	game->map.grid_cpy[i] = ft_strdup(line);
+	assign_placement(game, line, i);
+	verify_letters(line, game);
+}
+
 void	fill_map(t_game *game, char *file)
 {
 	int		fd;
-	int		i;
 	char	*line;
+	int		i;
 
 	fd = open(file, O_RDONLY);
 	if (fd == -1)
 		error_map("Map not found", game);
+	line = get_next_line(fd, 0);
+	if (!line)
+	{
+		close(fd);
+		error_map("Empty map file", game);
+	}
 	i = 0;
-	line = get_next_line(fd);
 	while (line)
 	{
-		if (i == 0)
-			game->map.width = grid_length(line);
-		if (grid_length(line) != game->map.width)
-		{
-			free(line);
-			error_map("Map lines not the same length", game);
-		}
-		game->map.grid[i] = ft_strdup(line);
-		game->map.grid_cpy[i] = ft_strdup(line);
-		assign_placement(game, line, i);
-		verify_letters(line, game);
+		process_map_line(game, line, i);
 		free(line);
 		i++;
-		line = get_next_line(fd);
+		line = get_next_line(fd, 0);
 	}
 	game->map.grid[i] = NULL;
 	game->map.grid_cpy[i] = NULL;
@@ -80,7 +72,7 @@ void	assign_placement(t_game *game, char *line, int i)
 	int	x;
 
 	x = 0;
-	while(line[x])
+	while (line[x])
 	{
 		if (line[x] == 'P')
 		{
@@ -99,7 +91,7 @@ void	assign_placement(t_game *game, char *line, int i)
 }
 
 int	read_map(t_game *game, char **argv)
-{	
+{
 	game->map.height = grid_height(argv[1]);
 	if (game->map.height == 0)
 		error_map("Empty map", game);

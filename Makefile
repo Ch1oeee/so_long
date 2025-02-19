@@ -1,4 +1,5 @@
 NAME = so_long
+BONUS_NAME = so_long_bonus
 FLAGS = -Wall -Wextra -Werror #-g3 -fsanitize=address
 MLX_FLAGS = -L./minilibx-linux -lmlx -lbsd -lXext -lX11 -lm
 RM = rm -rf
@@ -15,8 +16,15 @@ SRCS =	srcs/parsing/parsing.c\
 		srcs/parsing/parsing_map.c\
 		srcs/parsing/init_map.c\
 		srcs/game/game.c\
+		srcs/game/draw_map.c\
+		srcs/parsing/map_verify_paths.c\
+		srcs/parsing/parsing_map_utils.c\
+
+BONUS_SRCS =	srcs/bonus/bonus.c\
+				srcs/bonus/parsing_bonus.c\
 
 OBJS = $(SRCS:.c=.o)
+BONUS_OBJS = $(BONUS_SRCS:.c=.o)
 
 $(NAME): $(LIBRARIES) $(OBJS)
 	@echo "$(ROSE)\e[1m┌─────$(NAME)────────────────────────────────────┐\e"
@@ -25,6 +33,15 @@ $(NAME): $(LIBRARIES) $(OBJS)
 	@$(CC) $(FLAGS) -o $(NAME) $(OBJS) $(LIBRARIES) $(MLX_FLAGS)
 	@echo "$(RED)\e[1m┌─────$(NAME)────────────────────────────────────┐\e"
 	@echo "││$(GREEN)	      \e[1mCompilation finished 🌱\e		$(ROSE) │"
+	@echo "\e[1m└────────────────────────────────────────────────┘\e"
+
+$(BONUS_NAME): $(LIBRARIES) $(BONUS_OBJS)
+	@echo "$(ROSE)\e[1m┌─────$(BONUS_NAME)────────────────────────────────────┐\e"
+	@echo "││$(BLUE)		Compiling $(BONUS_NAME) 🎯	$(ROSE)	 │"
+	@echo "\e[1m└────────────────────────────────────────────────┘\e"
+	@$(CC) $(FLAGS) -o $(BONUS_NAME) $(BONUS_OBJS) $(LIBRARIES) $(MLX_FLAGS)
+	@echo "$(RED)\e[1m┌─────$(BONUS_NAME)────────────────────────────────────┐\e"
+	@echo "││$(GREEN)		\e[1mCompilation finished 🌟\e	$(ROSE)	 │"
 	@echo "\e[1m└────────────────────────────────────────────────┘\e"
 
 $(LIBRARIES):
@@ -39,14 +56,16 @@ minilibx :
 
 all: $(NAME)
 
+bonus: $(BONUS_NAME)
+
 clean:
-	@$(RM) $(OBJS)
+	@$(RM) $(OBJS) $(BONUS_OBJS)
 	@$(MAKE) -C $(LIBRARIES_DIR) clean --no-print-directory
 
 fclean: clean
-	@$(RM) $(NAME)
+	@$(RM) $(NAME) $(BONUS_OBJS)
 	@$(MAKE) -C $(LIBRARIES_DIR) fclean --no-print-directory
 
 re: fclean all
 
-.PHONY: all bonus clean fclean re minilibx
+.PHONY: all bonus clean fclean re minilibx bonus

@@ -6,7 +6,7 @@
 /*   By: cmontaig <cmontaig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 14:24:35 by cmontaig          #+#    #+#             */
-/*   Updated: 2025/02/02 16:30:57 by cmontaig         ###   ########.fr       */
+/*   Updated: 2025/02/18 05:33:53 by cmontaig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,6 @@ char	*one_line(char *buffer)
 		line[i] = buffer[i];
 		i++;
 	}
-	// if (buffer[i] && buffer[i] == '\n')
-	// 	line[i++] = '\n';
 	line[i] = '\0';
 	return (line);
 }
@@ -99,11 +97,18 @@ char	*read_txt(int fd, char *txt)
 	return (txt);
 }
 
-char	*get_next_line(int fd)
+char	*get_next_line(int fd, int free_buffer)
 {
 	static char	*buffer;
 	char		*line;
 
+	if (free_buffer)
+	{
+		if (buffer)
+			free(buffer);
+		buffer = NULL;
+		return (NULL);
+	}
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	buffer = read_txt(fd, buffer);

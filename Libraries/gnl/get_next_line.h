@@ -6,7 +6,7 @@
 /*   By: cmontaig <cmontaig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 14:24:40 by cmontaig          #+#    #+#             */
-/*   Updated: 2025/02/08 22:53:36 by cmontaig         ###   ########.fr       */
+/*   Updated: 2025/02/18 03:44:34 by cmontaig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 #  define BUFFER_SIZE 42
 # endif
 
-char	*get_next_line(int fd);
+char	*get_next_line(int fd, int free_buffer);
 char	*read_txt(int fd, char *txt);
 char	*one_line(char *buffer);
 char	*lines_after(char *buffer);
