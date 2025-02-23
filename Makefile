@@ -20,8 +20,16 @@ SRCS =	srcs/parsing/parsing.c\
 		srcs/parsing/map_verify_paths.c\
 		srcs/parsing/parsing_map_utils.c\
 
-BONUS_SRCS =	srcs/bonus/bonus.c\
-				srcs/bonus/parsing_bonus.c\
+BONUS_SRCS =	srcs/bonus/parsing/bonus.c\
+				srcs/bonus/parsing/init_map_b.c\
+				srcs/bonus/parsing/map_verify_paths_b.c\
+				srcs/bonus/parsing/parsing_map_b.c\
+				srcs/bonus/game_b/game_mechanics.c\
+				srcs/bonus/game_b/game_bonus.c\
+				srcs/bonus/game_b/animations.c\
+				srcs/parsing/parsing_map_utils.c\
+				srcs/game/game.c\
+			
 
 OBJS = $(SRCS:.c=.o)
 BONUS_OBJS = $(BONUS_SRCS:.c=.o)
@@ -36,13 +44,13 @@ $(NAME): $(LIBRARIES) $(OBJS)
 	@echo "\e[1m└────────────────────────────────────────────────┘\e"
 
 $(BONUS_NAME): $(LIBRARIES) $(BONUS_OBJS)
-	@echo "$(ROSE)\e[1m┌─────$(BONUS_NAME)────────────────────────────────────┐\e"
-	@echo "││$(BLUE)		Compiling $(BONUS_NAME) 🎯	$(ROSE)	 │"
-	@echo "\e[1m└────────────────────────────────────────────────┘\e"
+	@echo "$(ROSE)\e[1m┌─────$(BONUS_NAME)─────────────────────────────┐\e"
+	@echo "││$(BLUE)		Compiling $(BONUS_NAME) 🎯	$(ROSE)│"
+	@echo "\e[1m└───────────────────────────────────────────────┘\e"
 	@$(CC) $(FLAGS) -o $(BONUS_NAME) $(BONUS_OBJS) $(LIBRARIES) $(MLX_FLAGS)
-	@echo "$(RED)\e[1m┌─────$(BONUS_NAME)────────────────────────────────────┐\e"
-	@echo "││$(GREEN)		\e[1mCompilation finished 🌟\e	$(ROSE)	 │"
-	@echo "\e[1m└────────────────────────────────────────────────┘\e"
+	@echo "$(RED)\e[1m┌─────$(BONUS_NAME)─────────────────────────────┐\e"
+	@echo "││$(GREEN)		\e[1mCompilation finished 🌟\e	$(ROSE)	│"
+	@echo "\e[1m└───────────────────────────────────────────────┘\e"
 
 $(LIBRARIES):
 	@$(MAKE) -C $(LIBRARIES_DIR) --no-print-directory

@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing.c                                          :+:      :+:    :+:   */
+/*   bonus.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cmontaig <cmontaig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/26 18:32:44 by cmontaig          #+#    #+#             */
-/*   Updated: 2025/02/23 19:10:40 by cmontaig         ###   ########.fr       */
+/*   Created: 2025/02/19 14:44:15 by cmontaig          #+#    #+#             */
+/*   Updated: 2025/02/23 20:31:19 by cmontaig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minilibx-linux/mlx.h"
-#include "../so_long.h"
+#include "../../../minilibx-linux/mlx.h"
+#include "../../so_long.h"
 
 int	main(int argc, char **argv)
 {
@@ -19,7 +19,7 @@ int	main(int argc, char **argv)
 
 	(void)argc;
 	ft_memset(&game, 0, sizeof(t_game));
-	if (!read_map(&game, argv))
+	if (!read_map_bonus(&game, argv))
 		error_map("Invalid map", &game);
 	game.mlx = mlx_init();
 	if (!game.mlx)
@@ -31,6 +31,7 @@ int	main(int argc, char **argv)
 	if (!game.win)
 		error_map("Can't creat window", &game);
 	draw_textures(&game);
+	load_death_sprites(&game);
 	draw_map(&game);
 	mlx_hook(game.win, 2, 1L << 0, key_handler, &game);
 	mlx_hook(game.win, 17, 1L << 0, close_window, &game);
@@ -38,7 +39,6 @@ int	main(int argc, char **argv)
 	return (0);
 }
 
-//shouldn't get a winning text if the window is closed, should changed that
 int	key_handler(int keycode, t_game *game)
 {
 	if (keycode == 65307)
@@ -48,18 +48,17 @@ int	key_handler(int keycode, t_game *game)
 		mlx_destroy_window(game->mlx, game->win);
 		mlx_destroy_display(game->mlx);
 		free(game->mlx);
-		ft_printf("Congratulations, you've successfully escaped !!\n");
+		ft_printf("You closed the game\n");
 		exit(0);
 	}
 	else
-		character_moves(keycode, game);
+		character_moves_b(keycode, game);
 	return (0);
 }
 
 //shouldn't get a winning text if the window is closed, should changed that
 int	close_window(t_game *game)
 {
-	ft_printf("Congratulations, you've successfully escaped !!\n");
 	free_grid_cpy(game->map.grid, game->map.height);
 	free_img(game);
 	mlx_destroy_window(game->mlx, game->win);

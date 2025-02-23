@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init_map.c                                         :+:      :+:    :+:   */
+/*   init_map_b.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cmontaig <cmontaig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/30 11:21:08 by cmontaig          #+#    #+#             */
-/*   Updated: 2025/02/23 13:08:32 by cmontaig         ###   ########.fr       */
+/*   Created: 2025/02/23 13:03:59 by cmontaig          #+#    #+#             */
+/*   Updated: 2025/02/23 13:24:43 by cmontaig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minilibx-linux/mlx.h"
-#include "../so_long.h" 
-#include "../../Libraries/gnl/get_next_line.h"
-#include "../../Libraries/libft/libft.h"
+#include "../../../minilibx-linux/mlx.h"
+#include "../../so_long.h" 
+#include "../../../Libraries/gnl/get_next_line.h"
+#include "../../../Libraries/libft/libft.h"
 
 void	allocate_map(t_game *game, int line_count)
 {
@@ -36,7 +36,7 @@ void	process_map_line(t_game *game, char *line, int i)
 	game->map.grid[i] = ft_strdup(line);
 	game->map.grid_cpy[i] = ft_strdup(line);
 	assign_placement(game, line, i);
-	verify_letters(line, game);
+	verify_letters_b(line, game);
 }
 
 void	fill_map(t_game *game, char *file)
@@ -86,11 +86,17 @@ void	assign_placement(t_game *game, char *line, int i)
 		}
 		else if (line[x] == 'C')
 			game->map.collectibles++;
+		else if (line[x] == 'B')
+		{
+			game->bonus.ennemi_x = x;
+			game->bonus.ennemi_y = i;
+			game->bonus.nb_ennemi++;
+		}
 		x++;
 	}
 }
 
-int	read_map(t_game *game, char **argv)
+int	read_map_bonus(t_game *game, char **argv)
 {
 	game->map.height = grid_height(argv[1]);
 	if (game->map.height == 0)
@@ -99,8 +105,7 @@ int	read_map(t_game *game, char **argv)
 	game->player_moves = 0;
 	allocate_map(game, game->map.height);
 	fill_map(game, argv[1]);
-	rectangle_map(game);
-	missing_letters(game);
 	verify_paths(game);
+	printf("%d\n", game->bonus.nb_ennemi);
 	return (1);
 }
