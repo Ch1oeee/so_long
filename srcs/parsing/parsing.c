@@ -6,7 +6,7 @@
 /*   By: cmontaig <cmontaig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/26 18:32:44 by cmontaig          #+#    #+#             */
-/*   Updated: 2025/02/23 19:10:40 by cmontaig         ###   ########.fr       */
+/*   Updated: 2025/02/24 10:14:05 by cmontaig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ int	main(int argc, char **argv)
 	return (0);
 }
 
-//shouldn't get a winning text if the window is closed, should changed that
 int	key_handler(int keycode, t_game *game)
 {
 	if (keycode == 65307)
@@ -48,7 +47,7 @@ int	key_handler(int keycode, t_game *game)
 		mlx_destroy_window(game->mlx, game->win);
 		mlx_destroy_display(game->mlx);
 		free(game->mlx);
-		ft_printf("Congratulations, you've successfully escaped !!\n");
+		ft_printf("You've closed the game !\n");
 		exit(0);
 	}
 	else
@@ -56,10 +55,10 @@ int	key_handler(int keycode, t_game *game)
 	return (0);
 }
 
-//shouldn't get a winning text if the window is closed, should changed that
 int	close_window(t_game *game)
 {
-	ft_printf("Congratulations, you've successfully escaped !!\n");
+	if(game->map.collectibles != 0)
+		ft_printf("You've closed the game !\n");
 	free_grid_cpy(game->map.grid, game->map.height);
 	free_img(game);
 	mlx_destroy_window(game->mlx, game->win);

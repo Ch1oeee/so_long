@@ -26,7 +26,8 @@ BONUS_SRCS =	srcs/bonus/parsing/bonus.c\
 				srcs/bonus/parsing/parsing_map_b.c\
 				srcs/bonus/game_b/game_mechanics.c\
 				srcs/bonus/game_b/game_bonus.c\
-				srcs/bonus/game_b/animations.c\
+				srcs/bonus/game_b/animations_player.c\
+				srcs/bonus/game_b/animations_ennemi.c\
 				srcs/parsing/parsing_map_utils.c\
 				srcs/game/game.c\
 			
@@ -71,7 +72,7 @@ clean:
 	@$(MAKE) -C $(LIBRARIES_DIR) clean --no-print-directory
 
 fclean: clean
-	@$(RM) $(NAME) $(BONUS_OBJS)
+	@$(RM) $(NAME) $(BONUS_OBJS) $(BONUS_NAME)
 	@$(MAKE) -C $(LIBRARIES_DIR) fclean --no-print-directory
 
 re: fclean all

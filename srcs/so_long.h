@@ -6,7 +6,7 @@
 /*   By: cmontaig <cmontaig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 14:17:33 by cmontaig          #+#    #+#             */
-/*   Updated: 2025/02/23 20:31:07 by cmontaig         ###   ########.fr       */
+/*   Updated: 2025/02/24 13:15:48 by cmontaig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,10 @@ typedef struct s_bonus
 	void	*ennemi_textures;
 	int		nb_ennemi;
 	void	*death_sprites[5];
+	void	*ennemi_death[3];
 	int		death_frame;
+	int		ennemi_frame;
+	int		ennemi_dead;
 }				t_bonus;
 
 typedef struct s_game
@@ -104,7 +107,7 @@ void	free_img(t_game *game);
 void	allocate_map(t_game *game, int line_count);
 
 //GAME 
-void	handle_movement(int keycode, int *new_x, int *new_y);
+int		handle_movement(int keycode, int *new_x, int *new_y);
 void	update_position(t_game *game, int new_x, int new_y);
 void	character_moves(int keycode, t_game *game);
 void	open_exit(t_game *game);
@@ -119,8 +122,11 @@ void	character_moves_b(int keycode, t_game *game);
 void	open_exit_b(t_game *game);
 void	display_moves(t_game *game);
 int		animate_death(t_game *game);
-void	free_death_sprites(t_game *game);
 void	start_death_animation(t_game *game);
 void	load_death_sprites(t_game *game);
+void	load_ennemi_sprites(t_game *game);
+int		animate_death_ennemi(t_game *game);
+void	start_death_animation_ennemi(t_game *game);
+
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: cmontaig <cmontaig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 13:03:59 by cmontaig          #+#    #+#             */
-/*   Updated: 2025/02/23 13:24:43 by cmontaig         ###   ########.fr       */
+/*   Updated: 2025/02/23 21:11:01 by cmontaig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,5 @@ int	read_map_bonus(t_game *game, char **argv)
 	allocate_map(game, game->map.height);
 	fill_map(game, argv[1]);
 	verify_paths(game);
-	printf("%d\n", game->bonus.nb_ennemi);
 	return (1);
 }

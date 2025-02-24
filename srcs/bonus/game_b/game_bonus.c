@@ -6,7 +6,7 @@
 /*   By: cmontaig <cmontaig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 13:26:00 by cmontaig          #+#    #+#             */
-/*   Updated: 2025/02/23 20:51:50 by cmontaig         ###   ########.fr       */
+/*   Updated: 2025/02/24 14:35:43 by cmontaig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,11 @@ void	draw_basic_tiles(t_game *game, int x, int y, char tile)
 	else if (tile == 'P')
 		mlx_put_image_to_window(game->mlx, game->win, game->textures.player,
 			x * game->tile_size, y * game->tile_size);
+	else if (tile == 'X')
+		mlx_put_image_to_window(game->mlx, game->win, 
+				game->bonus.ennemi_death[2],
+				game->bonus.ennemi_x * game->tile_size, 
+				game->bonus.ennemi_y * game->tile_size);
 	else if (tile == 'B')
 		  mlx_put_image_to_window(game->mlx, game->win, game->bonus.ennemi_textures,
 			x * game->tile_size, y * game->tile_size);

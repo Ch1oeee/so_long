@@ -6,7 +6,7 @@
 /*   By: cmontaig <cmontaig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 14:57:41 by cmontaig          #+#    #+#             */
-/*   Updated: 2025/02/23 19:02:02 by cmontaig         ###   ########.fr       */
+/*   Updated: 2025/02/24 14:38:30 by cmontaig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,24 +34,27 @@ void	character_moves_b(int keycode, t_game *game)
 
 	new_x = game->map.player_x;
 	new_y = game->map.player_y;
-	handle_movement(keycode, &new_x, &new_y);
-	if (game->map.grid[new_y][new_x] == 'B')
+	if (handle_movement(keycode, &new_x, &new_y))
 	{
-		if (game->map.collectibles > 0)
-			open_exit_b(game);
-		else
+		if (game->map.grid[new_y][new_x] == 'B')
 		{
-			game->bonus.nb_ennemi--;
-			update_position(game, new_x, new_y);
+			if (game->map.collectibles > 0)
+				open_exit_b(game);
+			else
+			{
+				game->bonus.nb_ennemi--;
+				start_death_animation_ennemi(game);
+			}
 		}
+		else if (game->map.grid[new_y][new_x] != '1'
+			&& game->map.grid[new_y][new_x] != 'E'
+			&& game->map.grid[new_y][new_x] != 'X')
+			update_position_b(game, new_x, new_y);
+		else if (game->map.grid[new_y][new_x] == 'B' && game->map.collectibles > 0)
+			open_exit_b(game);
+		else if (game->map.grid[new_y][new_x] == 'E' && game->map.collectibles == 0)
+			open_exit_b(game);
 	}
-	else if (game->map.grid[new_y][new_x] != '1'
-		&& game->map.grid[new_y][new_x] != 'E')
-		update_position_b(game, new_x, new_y);
-	else if (game->map.grid[new_y][new_x] == 'B' && game->map.collectibles > 0)
-		open_exit_b(game);
-	else if (game->map.grid[new_y][new_x] == 'E' && game->map.collectibles == 0)
-		open_exit_b(game);
 }
 
 void	open_exit_b(t_game *game)
@@ -75,7 +78,7 @@ void	display_moves(t_game *game)
 	char	*move_count;
 
 	move_count = ft_itoa(game->player_moves);
-	mlx_string_put(game->mlx, game->win, 10, 15, 0xFFFFFF, "Mouvments :");
+	mlx_string_put(game->mlx, game->win, 10, 15, 0xFFFFFF, "Movements :");
 	mlx_string_put(game->mlx, game->win, 80, 15, 0xFFFFFF, move_count);
 	free(move_count);
 }

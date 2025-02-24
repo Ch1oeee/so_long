@@ -6,7 +6,7 @@
 /*   By: cmontaig <cmontaig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 14:44:15 by cmontaig          #+#    #+#             */
-/*   Updated: 2025/02/23 20:31:19 by cmontaig         ###   ########.fr       */
+/*   Updated: 2025/02/24 11:47:23 by cmontaig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ int	main(int argc, char **argv)
 		error_map("Can't creat window", &game);
 	draw_textures(&game);
 	load_death_sprites(&game);
+	load_ennemi_sprites(&game);
 	draw_map(&game);
 	mlx_hook(game.win, 2, 1L << 0, key_handler, &game);
 	mlx_hook(game.win, 17, 1L << 0, close_window, &game);

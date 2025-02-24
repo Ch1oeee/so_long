@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   animations.c                                       :+:      :+:    :+:   */
+/*   animations_player.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cmontaig <cmontaig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 18:37:43 by cmontaig          #+#    #+#             */
-/*   Updated: 2025/02/23 20:58:35 by cmontaig         ###   ########.fr       */
+/*   Updated: 2025/02/24 12:23:11 by cmontaig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,7 @@ void	load_death_sprites(t_game *game)
 	game->bonus.death_frame = 0;
 }
 
-//SEGFAULTTTTTTTTTTT
-int animate_death(t_game *game)
+int	animate_death(t_game *game)
 {
 	static int delay;
 
@@ -47,10 +46,8 @@ int animate_death(t_game *game)
 	if (game->bonus.death_frame < 5)
 	{
 		delay++;
-		if (delay >= 10000)
+		if (delay >= 15000)
 		{
-			if (!game->bonus.death_sprites[game->bonus.death_frame])
-				return (1);
 			mlx_clear_window(game->mlx, game->win);
 			draw_map(game);
 			mlx_put_image_to_window(game->mlx, game->win, 
@@ -75,13 +72,5 @@ void start_death_animation(t_game *game)
 }
 
 
-// void	free_death_sprites(t_game *game)
-// {
-// 	for (int i = 0; i < 5; i++)
-// 	{
-// 		if (game->bonus.death_sprites[i])
-// 			mlx_destroy_image(game->mlx, game->bonus.death_sprites[i]);
-// 	}
-// }
 
 
