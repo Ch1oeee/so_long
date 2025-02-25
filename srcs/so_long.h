@@ -6,7 +6,7 @@
 /*   By: cmontaig <cmontaig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 14:17:33 by cmontaig          #+#    #+#             */
-/*   Updated: 2025/02/24 13:15:48 by cmontaig         ###   ########.fr       */
+/*   Updated: 2025/02/25 16:45:13 by cmontaig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,13 +54,19 @@ typedef struct s_bonus
 {
 	int		ennemi_y;
 	int		ennemi_x;
-	void	*ennemi_textures;
+	int		ennemi_frame;
 	int		nb_ennemi;
+	void	*ennemi_textures;
 	void	*death_sprites[5];
 	void	*ennemi_death[3];
+	void	*player_up;
+	void	*player_left;
+	void	*player_down;
+	void	*ennemi_up;
+	void	*ennemi_left;
+	void	*ennemi_down;
 	int		death_frame;
-	int		ennemi_frame;
-	int		ennemi_dead;
+	
 }				t_bonus;
 
 typedef struct s_game
@@ -127,6 +133,8 @@ void	load_death_sprites(t_game *game);
 void	load_ennemi_sprites(t_game *game);
 int		animate_death_ennemi(t_game *game);
 void	start_death_animation_ennemi(t_game *game);
+void	load_walking_sprites(t_game *game);
+void	walking_animation(t_game *game, int keycode, int x, int y);
 
 
 #endif

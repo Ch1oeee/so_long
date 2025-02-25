@@ -6,7 +6,7 @@
 /*   By: cmontaig <cmontaig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 13:26:00 by cmontaig          #+#    #+#             */
-/*   Updated: 2025/02/24 14:35:43 by cmontaig         ###   ########.fr       */
+/*   Updated: 2025/02/25 16:52:13 by cmontaig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void draw_textures(t_game *game)
 			&game->textures.img_height);
 	if (!game->textures.grass || !game->textures.wall || !game->textures.player
 		|| !game->textures.exit || !game->textures.collectible)
-		ft_printf("textures not loaded"), exit(1);
+		ft_printf("textures not loaded\n"), exit(1);
 }
 
 void	draw_basic_tiles(t_game *game, int x, int y, char tile)

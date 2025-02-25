@@ -6,7 +6,7 @@
 /*   By: cmontaig <cmontaig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 11:09:47 by cmontaig          #+#    #+#             */
-/*   Updated: 2025/02/24 14:38:12 by cmontaig         ###   ########.fr       */
+/*   Updated: 2025/02/25 15:45:39 by cmontaig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ void	load_ennemi_sprites(t_game *game)
 		!game->bonus.ennemi_death[2])
 		ft_printf("textures not loaded"), exit(1);
 	game->bonus.ennemi_frame = 0;
-	game->bonus.ennemi_dead = 0;
 }
 
 int	animate_death_ennemi(t_game *game)

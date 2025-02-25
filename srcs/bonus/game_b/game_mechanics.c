@@ -6,7 +6,7 @@
 /*   By: cmontaig <cmontaig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 14:57:41 by cmontaig          #+#    #+#             */
-/*   Updated: 2025/02/24 14:38:30 by cmontaig         ###   ########.fr       */
+/*   Updated: 2025/02/25 16:49:49 by cmontaig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,10 @@ void	character_moves_b(int keycode, t_game *game)
 		else if (game->map.grid[new_y][new_x] != '1'
 			&& game->map.grid[new_y][new_x] != 'E'
 			&& game->map.grid[new_y][new_x] != 'X')
+		{
+			walking_animation(game, keycode, new_x, new_y);
 			update_position_b(game, new_x, new_y);
+		}
 		else if (game->map.grid[new_y][new_x] == 'B' && game->map.collectibles > 0)
 			open_exit_b(game);
 		else if (game->map.grid[new_y][new_x] == 'E' && game->map.collectibles == 0)
@@ -83,3 +86,15 @@ void	display_moves(t_game *game)
 	free(move_count);
 }
 
+void	walking_animation(t_game *game, int keycode, int x, int y)
+{
+	if (keycode == 119)
+		mlx_put_image_to_window(game->mlx, game->win, game->bonus.player_up,
+			x * game->tile_size, y * game->tile_size);
+	else if (keycode == 97)
+		mlx_put_image_to_window(game->mlx, game->win, game->bonus.player_left,
+			x * game->tile_size, y * game->tile_size);
+	else if (keycode == 100)
+		mlx_put_image_to_window(game->mlx, game->win, game->bonus.player_down,
+			x * game->tile_size, y * game->tile_size);
+}

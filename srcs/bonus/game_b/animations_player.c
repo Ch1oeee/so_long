@@ -6,7 +6,7 @@
 /*   By: cmontaig <cmontaig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 18:37:43 by cmontaig          #+#    #+#             */
-/*   Updated: 2025/02/24 12:23:11 by cmontaig         ###   ########.fr       */
+/*   Updated: 2025/02/25 16:48:22 by cmontaig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,30 @@ void start_death_animation(t_game *game)
 	mlx_loop_hook(game->mlx, animate_death, game);
 }
 
-
+void	load_walking_sprites(t_game *game)
+{
+	game->bonus.player_down = mlx_xpm_file_to_image(game->mlx,
+		"assets/bonus_assets/move_down.xpm", &game->textures.img_width,
+		&game->textures.img_height);
+	game->bonus.player_up = mlx_xpm_file_to_image(game->mlx,
+		"assets/bonus_assets/move_up.xpm", &game->textures.img_width,
+		&game->textures.img_height);
+	game->bonus.player_left = mlx_xpm_file_to_image(game->mlx,
+		"assets/bonus_assets/move_left.xpm", &game->textures.img_width,
+		&game->textures.img_height);
+	game->bonus.ennemi_left = mlx_xpm_file_to_image(game->mlx,
+		"assets/bonus_assets/chicken_left.xpm", &game->textures.img_width,
+		&game->textures.img_height);
+	game->bonus.ennemi_up = mlx_xpm_file_to_image(game->mlx,
+		"assets/bonus_assets/chicken_up.xpm", &game->textures.img_width,
+		&game->textures.img_height);
+	game->bonus.ennemi_down = mlx_xpm_file_to_image(game->mlx,
+		"assets/bonus_assets/chicken_down.xpm", &game->textures.img_width,
+		&game->textures.img_height);
+	if (!game->bonus.player_down || !game->bonus.player_up ||
+		!game->bonus.player_left || !game->bonus.ennemi_left ||
+		!game->bonus.ennemi_up || !game->bonus.ennemi_down)
+		ft_printf("Walking textures not loaded\n"), exit(1);
+}
 
 
