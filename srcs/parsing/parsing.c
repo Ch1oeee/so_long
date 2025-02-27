@@ -6,7 +6,7 @@
 /*   By: cmontaig <cmontaig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/26 18:32:44 by cmontaig          #+#    #+#             */
-/*   Updated: 2025/02/24 10:14:05 by cmontaig         ###   ########.fr       */
+/*   Updated: 2025/02/27 13:31:24 by cmontaig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int	key_handler(int keycode, t_game *game)
 
 int	close_window(t_game *game)
 {
-	if(game->map.collectibles != 0)
+	if (game->map.collectibles != 0)
 		ft_printf("You've closed the game !\n");
 	free_grid_cpy(game->map.grid, game->map.height);
 	free_img(game);

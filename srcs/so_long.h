@@ -6,7 +6,7 @@
 /*   By: cmontaig <cmontaig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 14:17:33 by cmontaig          #+#    #+#             */
-/*   Updated: 2025/02/25 16:45:13 by cmontaig         ###   ########.fr       */
+/*   Updated: 2025/02/27 17:19:29 by cmontaig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,8 @@ typedef struct s_bonus
 	void	*ennemi_left;
 	void	*ennemi_down;
 	int		death_frame;
-	
+	int		walking;
+	int		ennemi_faces;
 }				t_bonus;
 
 typedef struct s_game
@@ -84,7 +85,6 @@ typedef struct s_game
 	t_textures	textures;
 	t_bonus		bonus;
 }				t_game;
-
 
 int		key_handler(int keycode, t_game *game);
 int		close_window(t_game *game);
@@ -134,7 +134,14 @@ void	load_ennemi_sprites(t_game *game);
 int		animate_death_ennemi(t_game *game);
 void	start_death_animation_ennemi(t_game *game);
 void	load_walking_sprites(t_game *game);
-void	walking_animation(t_game *game, int keycode, int x, int y);
+void	walking_animation(t_game *game, int x, int y);
+int		handle_movement_b(t_game *game, int keycode, int *new_x, int *new_y);
+void	ennemi_walking(t_game *game, int update_x, int update_y);
+void	ennemi_moves(t_game *game);
+int		handle_mov_ennemi(t_game *game, int *update_x, int *update_y);
+void	ennemi_walking_animation(t_game *game, int x, int y);
 
+void copy_grid(t_game *game);
+void verify_paths(t_game *game);
 
 #endif

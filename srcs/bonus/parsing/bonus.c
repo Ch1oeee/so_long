@@ -6,7 +6,7 @@
 /*   By: cmontaig <cmontaig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 14:44:15 by cmontaig          #+#    #+#             */
-/*   Updated: 2025/02/25 15:58:13 by cmontaig         ###   ########.fr       */
+/*   Updated: 2025/02/27 13:35:08 by cmontaig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ int	key_handler(int keycode, t_game *game)
 	return (0);
 }
 
-//shouldn't get a winning text if the window is closed, should changed that
 int	close_window(t_game *game)
 {
 	free_grid_cpy(game->map.grid, game->map.height);
@@ -76,4 +75,48 @@ void	free_img(t_game *game)
 	mlx_destroy_image(game->mlx, game->textures.exit);
 	mlx_destroy_image(game->mlx, game->textures.grass);
 	mlx_destroy_image(game->mlx, game->textures.player);
+	mlx_destroy_image(game->mlx, game->bonus.player_down);
+	mlx_destroy_image(game->mlx, game->bonus.player_up);
+	mlx_destroy_image(game->mlx, game->bonus.player_left);
+	mlx_destroy_image(game->mlx, game->bonus.ennemi_left);
+	mlx_destroy_image(game->mlx, game->bonus.ennemi_up);
+	mlx_destroy_image(game->mlx, game->bonus.ennemi_down);
+	mlx_destroy_image(game->mlx, game->bonus.death_sprites[0]);
+	mlx_destroy_image(game->mlx, game->bonus.death_sprites[1]);
+	mlx_destroy_image(game->mlx, game->bonus.death_sprites[2]);
+	mlx_destroy_image(game->mlx, game->bonus.death_sprites[3]);
+	mlx_destroy_image(game->mlx, game->bonus.death_sprites[4]);
+	mlx_destroy_image(game->mlx, game->bonus.ennemi_textures);
+	mlx_destroy_image(game->mlx, game->bonus.ennemi_death[0]);
+	mlx_destroy_image(game->mlx, game->bonus.ennemi_death[1]);
+	mlx_destroy_image(game->mlx, game->bonus.ennemi_death[2]);
+}
+
+int	handle_movement_b(t_game *game, int keycode, int *new_x, int *new_y)
+{
+	if (keycode == 119)
+	{
+		(*new_y)--;
+		game->bonus.walking = 1;
+		return (1);
+	}
+	else if (keycode == 97)
+	{
+		(*new_x)--;
+		game->bonus.walking = 2;
+		return (1);
+	}
+	else if (keycode == 115)
+	{
+		(*new_y)++;
+		game->bonus.walking = 3;
+		return (1);
+	}
+	else if (keycode == 100)
+	{
+		(*new_x)++;
+		game->bonus.walking = 0;
+		return (1);
+	}
+	return (0);
 }

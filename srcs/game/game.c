@@ -6,7 +6,7 @@
 /*   By: cmontaig <cmontaig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 08:50:46 by cmontaig          #+#    #+#             */
-/*   Updated: 2025/02/24 09:51:33 by cmontaig         ###   ########.fr       */
+/*   Updated: 2025/02/27 13:31:41 by cmontaig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,8 @@ void	character_moves(int keycode, t_game *game)
 		if (game->map.grid[new_y][new_x] != '1'
 			&& game->map.grid[new_y][new_x] != 'E')
 			update_position(game, new_x, new_y);
-		else if (game->map.grid[new_y][new_x] == 'E' && game->map.collectibles == 0)
+		else if (game->map.grid[new_y][new_x] == 'E' &&
+			game->map.collectibles == 0)
 			open_exit(game);
 	}
 }

@@ -15,8 +15,8 @@ LIBRARIES = $(LIBRARIES_DIR)/libft.a
 SRCS =	srcs/parsing/parsing.c\
 		srcs/parsing/parsing_map.c\
 		srcs/parsing/init_map.c\
-		srcs/game/game.c\
 		srcs/game/draw_map.c\
+		srcs/game/game.c\
 		srcs/parsing/map_verify_paths.c\
 		srcs/parsing/parsing_map_utils.c\
 
@@ -30,7 +30,7 @@ BONUS_SRCS =	srcs/bonus/parsing/bonus.c\
 				srcs/bonus/game_b/animations_ennemi.c\
 				srcs/parsing/parsing_map_utils.c\
 				srcs/game/game.c\
-			
+				srcs/bonus/game_b/ennemi_death_animation.c\
 
 OBJS = $(SRCS:.c=.o)
 BONUS_OBJS = $(BONUS_SRCS:.c=.o)

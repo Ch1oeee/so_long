@@ -6,66 +6,90 @@
 /*   By: cmontaig <cmontaig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 11:09:47 by cmontaig          #+#    #+#             */
-/*   Updated: 2025/02/25 15:45:39 by cmontaig         ###   ########.fr       */
+/*   Updated: 2025/02/27 16:32:04 by cmontaig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../minilibx-linux/mlx.h"
 #include "../../so_long.h"
 
-void	load_ennemi_sprites(t_game *game)
+void	ennemi_walking(t_game *game, int update_x, int update_y)
 {
-	game->bonus.ennemi_death[0] = mlx_xpm_file_to_image(game->mlx,
-		"assets/bonus_assets/ennemi_death/b_death1.xpm",
-		&game->textures.img_width, &game->textures.img_height);
-	game->bonus.ennemi_death[1] = mlx_xpm_file_to_image(game->mlx,
-		"assets/bonus_assets/ennemi_death/b_death2.xpm",
-		&game->textures.img_width, &game->textures.img_height);
-	game->bonus.ennemi_death[2] = mlx_xpm_file_to_image(game->mlx,
-		"assets/bonus_assets/ennemi_death/b_death3.xpm",
-		&game->textures.img_width, &game->textures.img_height);
-	if (!game->bonus.ennemi_death[0] || !game->bonus.ennemi_death[1] ||
-		!game->bonus.ennemi_death[2])
-		ft_printf("textures not loaded"), exit(1);
-	game->bonus.ennemi_frame = 0;
+	game->map.grid[game->bonus.ennemi_y][game->bonus.ennemi_x] = '0';
+	game->bonus.ennemi_x = update_x;
+	game->bonus.ennemi_y = update_y;
+	game->map.grid[update_y][update_x] = 'B';
+	mlx_clear_window(game->mlx, game->win);
+	draw_map(game);
 }
 
-int	animate_death_ennemi(t_game *game)
+void	ennemi_moves(t_game *game)
 {
-	static int frame_delay;
+	int	update_x;
+	int	update_y;
 
-	if (frame_delay == 0)
-		frame_delay = 0;
-	if (game->bonus.ennemi_frame < 3)
+	update_x = game->bonus.ennemi_x;
+	update_y = game->bonus.ennemi_y;
+	if (handle_mov_ennemi(game, &update_x, &update_y))
 	{
-		frame_delay++;
-		if (frame_delay >= 15000)
-		{
-			mlx_clear_window(game->mlx, game->win);
-			draw_map(game);
-			mlx_put_image_to_window(game->mlx, game->win, 
-				game->bonus.ennemi_death[game->bonus.ennemi_frame],
-				game->bonus.ennemi_x * game->tile_size, 
-				game->bonus.ennemi_y * game->tile_size);
-			game->bonus.ennemi_frame++;
-			frame_delay = 0;
-		}
+		if (game->map.grid[update_y][update_x] != '1' &&
+			game->map.grid[update_y][update_x] != 'E' &&
+			game->map.grid[update_y][update_x] != 'C' &&
+			game->map.grid[update_y][update_x] != 'P')
+			ennemi_walking(game, update_x, update_y);
 	}
-	else
+}
+
+int	handle_mov_ennemi(t_game *game, int *update_x, int *update_y)
+{
+	if (game->player_moves % 5 == 0 && game->player_moves % 3 == 0)
 	{
-		mlx_loop_hook(game->mlx, NULL, game);
+		(*update_y)++;
+		game->bonus.ennemi_faces = 4;
+		return (1);
+	}
+	else if (game->player_moves % 3 == 0)
+	{
+		(*update_y)--;
+		game->bonus.ennemi_faces = 1;
+		return (1);
+	}
+	else if (game->player_moves % 2 == 0)
+	{
+		(*update_x)--;
+		game->bonus.ennemi_faces = 2;
+		return (1);
+	}
+	else if (game->player_moves % 5 == 0)
+	{
+		(*update_x)++;
+		game->bonus.ennemi_faces = 0;
 		return (1);
 	}
 	return (0);
 }
 
-void start_death_animation_ennemi(t_game *game)
+void	ennemi_walking_animation(t_game *game, int x, int y)
 {
-	if (game->bonus.ennemi_frame >= 3)
+	if (game->bonus.ennemi_faces == 1)
 	{
-		game->bonus.ennemi_frame = 0;
-		game->map.grid[game->bonus.ennemi_y][game->bonus.ennemi_x] = 'X';
+		mlx_put_image_to_window(game->mlx, game->win, game->bonus.ennemi_up,
+			x * game->tile_size, y * game->tile_size);
 	}
-	game->map.grid[game->bonus.ennemi_y][game->bonus.ennemi_x] = 'X';
-	mlx_loop_hook(game->mlx, animate_death_ennemi, game);
+	if (game->bonus.ennemi_faces == 2)
+	{
+		mlx_put_image_to_window(game->mlx, game->win, game->bonus.ennemi_left,
+			x * game->tile_size, y * game->tile_size);
+	}
+	if (game->bonus.ennemi_faces == 0)
+	{
+		mlx_put_image_to_window(game->mlx, game->win,
+			game->bonus.ennemi_textures,
+			x * game->tile_size, y * game->tile_size);
+	}
+	if (game->bonus.ennemi_faces == 4)
+	{
+		mlx_put_image_to_window(game->mlx, game->win, game->bonus.ennemi_down,
+			x * game->tile_size, y * game->tile_size);
+	}
 }
