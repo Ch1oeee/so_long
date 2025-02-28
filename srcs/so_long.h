@@ -6,7 +6,7 @@
 /*   By: cmontaig <cmontaig@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 14:17:33 by cmontaig          #+#    #+#             */
-/*   Updated: 2025/02/27 17:19:29 by cmontaig         ###   ########.fr       */
+/*   Updated: 2025/02/28 14:25:30 by cmontaig         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,12 +105,12 @@ int		grid_height(char *file);
 void	missing_letters(t_game *game);
 void	assign_placement(t_game *game, char *line, int i);
 void	verify_exit(t_game *game);
-void	verify_paths(t_game *game);
 void	flood_fill(t_game *game, char fill, int y, int x);
 void	verify_collectibles(t_game *game);
 void	free_grid_cpy(char **grid_cpy, int height);
 void	free_img(t_game *game);
 void	allocate_map(t_game *game, int line_count);
+void	verify_paths(t_game *game);
 
 //GAME 
 int		handle_movement(int keycode, int *new_x, int *new_y);
@@ -140,8 +140,5 @@ void	ennemi_walking(t_game *game, int update_x, int update_y);
 void	ennemi_moves(t_game *game);
 int		handle_mov_ennemi(t_game *game, int *update_x, int *update_y);
 void	ennemi_walking_animation(t_game *game, int x, int y);
-
-void copy_grid(t_game *game);
-void verify_paths(t_game *game);
 
 #endif
